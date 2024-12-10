@@ -187,6 +187,43 @@
       font-size: 16px;
       color: #555;
     }
+
+    .audio-section {
+      margin-bottom: 20px;
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    audio {
+      flex: 1;
+      min-width: 0;
+    }
+
+    #shuffleButton {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    #shuffleButton:hover {
+      background-color: #218838;
+      transform: scale(1.1);
+      transition: all 0.2s ease;
+    }
   </style>
 </head>
 
@@ -208,10 +245,18 @@
 
     <!-- 문제 오디오 -->
     <div class="audio-section">
-      <audio id="audio" controls>
-        <source id="audioSource" src="" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+      <div class="audio-controls">
+        <audio id="audio" controls>
+          <source id="audioSource" src="" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <button id="shuffleButton" onclick="shufflePlaylist()" aria-label="문제 섞기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm0.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
+          </svg>
+        </button>
+      </div>
       <div id="answerReveal"></div>
     </div>
 
@@ -283,6 +328,25 @@
 
     // 초기화
     document.getElementById("totalQuestions").innerText = totalQuestions;
+
+    function shufflePlaylist() {
+      // 현재 배열을 섞는 함수
+      for (let i = quizData.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [quizData[i], quizData[j]] = [quizData[j], quizData[i]];
+      }
+
+      // 첫 번째 문제부터 다시 시작
+      currentQuestion = 0;
+      correctAnswers = 0;
+
+      // 새로운 문제 로드
+      loadQuestion();
+
+      // 오디오 자동 재생
+      const audioElement = document.getElementById("audio");
+      audioElement.play();
+    }
 
     // 문제 로드 함수 수정
     function loadQuestion() {
