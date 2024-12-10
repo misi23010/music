@@ -119,7 +119,35 @@
     text-align: center; /* 텍스트 중앙 정렬 */
     padding: 20px;
   }
+  .audio-section {
+    margin-bottom: 20px;  
+  }
 
+  #toggleAnswer {
+    margin-top: 10px;
+    display: block;
+  }
+
+  #answerReveal {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .next-btn {
+    margin-top: 10px;
+    display: block;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .next-btn:hover {
+    background-color: #0056b3;
+  }
   </style>
 </head>
 <body>
@@ -138,6 +166,9 @@
         <source id="audioSource" src="" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
+      <!-- 정답 토글 -->
+      <button id="toggleAnswer" onclick="toggleAnswer()">정답 보기</button>
+      <div id="answerReveal" style="display: none;"></div>
     </div>
   
     <!-- 답안 입력 -->
@@ -160,10 +191,11 @@
     <!-- 결과 및 틀린 문제 표시 -->
     <div class="result-section">
       <div class="result" id="result"></div>
-      <!-- 넘어가기 버튼은 JavaScript에서 동적으로 추가 -->
+      <!-- 넘어가기 버튼 -->
+      <button id="nextButton" class="next-btn" style="margin-top: 10px;" onclick="goToNextQuestion()">넘어가기</button>
     </div>
   </div>
-
+  
   <!-- 복습 모드 -->
   <button onclick="startReviewMode()">복습 모드 시작</button>
 
@@ -290,6 +322,25 @@
     function toggleAnswerVisibility() {
         showAnswers = !showAnswers;
         updateAnswerVisibility();
+    }
+
+    // 정답 보기 토글 버튼 동작
+    function toggleAnswer() {
+      const answerReveal = document.getElementById("answerReveal");
+      const isHidden = answerReveal.style.display === "none";
+
+      if (isHidden) {
+        // 정답 표시
+        const correctMovie = quizData[currentQuestion].movie;
+        const correctComposer = quizData[currentQuestion].composer;
+        const correctMusic = quizData[currentQuestion].music;
+
+        answerReveal.innerHTML = `정답: 영화 - ${correctMovie}, 작곡가 - ${correctComposer}, 음악 - ${correctMusic}`;
+        answerReveal.style.display = "block";
+      } else {
+        // 정답 숨기기
+        answerReveal.style.display = "none";
+      }
     }
 
     // 정답 표시 상태 업데이트
