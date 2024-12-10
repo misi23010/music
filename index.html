@@ -31,10 +31,10 @@
       color: #333;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      -webkit-overflow-scrolling: touch;
     }
 
     .container {
@@ -47,6 +47,7 @@
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       margin-bottom: 20px;
+      overflow-y: auto;
     }
 
     h1 {
@@ -213,6 +214,8 @@
     #underdiv {
       text-align: center;
       margin-top: 20px;
+      max-height: 50vh;
+      overflow-y: auto;
     }
 
     #underdiv span {
@@ -354,10 +357,25 @@
       const underdiv = document.getElementById("underdiv");
       if (underdiv.style.display === "none") {
         underdiv.style.display = "block";
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 0);
       } else {
         underdiv.style.display = "none";
       }
     });
+
+    let ticking = false;
+    window.addEventListener('scroll', function (e) {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          // 스크롤 처리 로직
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
     // 초기화
     document.getElementById("totalQuestions").innerText = totalQuestions;
 
