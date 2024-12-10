@@ -58,7 +58,7 @@
       box-sizing: border-box;
     }
 
-    .progress {
+    .progress_ {
       margin-bottom: 20px;
       font-size: 16px;
     }
@@ -192,38 +192,7 @@
       color: #555;
     }
 
-    #shuffleButton {
-      float: right;
-      background-color: transparent;
-      color: gray;
-      border: none;
-      padding: 12px;
-      margin-top: 5px;
-      margin-right: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50px;
-      height: 50px;
-      flex-shrink: 0;
-    }
-
-    #shuffleButton svg {
-      width: 32px;
-      /* SVG 아이콘 크기 증가 */
-      height: 32px;
-      /* SVG 아이콘 크기 증가 */
-    }
-
-    #shuffleButton:hover {
-      background-color: transparent;
-      transform: scale(1.1);
-      transition: all 0.2s ease;
-    }
-
-    #undercon{
+    #undercon {
       margin-top: 0px;
     }
 
@@ -251,6 +220,111 @@
     #toggleUnderdiv:hover {
       background-color: #0056b3;
     }
+
+    .custom-audio-player {
+      background: #f1f3f4;
+      border-radius: 24px;
+      padding: 8px 25px;
+      /* 좌우 패딩값 증가 */
+      display: flex;
+      align-items: center;
+      width: calc(100% - 50px);
+      /* 전체 너비에서 패딩 값을 뺌 */
+      margin: 0 auto;
+      /* 중앙 정렬 */
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .play-pause {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f3f4;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-right: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .play-pause:hover {
+      background-color: #e0e0e0;
+    }
+
+    .play-pause .play,
+    .play-pause .pause {
+      font-size: 18px;
+      color: #333;
+    }
+
+    /* 기본적으로 pause 숨기기 */
+    .play-pause .pause {
+      display: none;
+    }
+
+    /* 재생 중일 때 */
+    .play-pause.playing .play {
+      display: none;
+    }
+
+    .play-pause.playing .pause {
+      display: block;
+    }
+
+    .progress-bar {
+      flex: 1;
+      background: #dadce0;
+      height: 4px;
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress {
+      background: #1a73e8;
+      height: 100%;
+      border-radius: 2px;
+      width: 0;
+    }
+
+    .time {
+      font-size: 12px;
+      color: #5f6368;
+      min-width: 100px;
+    }
+
+    #shuffleButton {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: #5f6368;
+    }
+
+    #shuffleButton:hover {
+      color: #1a73e8;
+    }
+
+    .volume-control {
+      margin-left: auto;
+    }
+
+    .volume {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 5px;
+      color: #5f6368;
+    }
   </style>
 </head>
 
@@ -260,8 +334,8 @@
   <div class="container">
 
     <!-- 진행 상황 및 버튼 -->
-    <div class="controls">
-      <div class="progress" id="progress">
+    <div class="controls_cur">
+      <div class="progress_" id="progress_">
         진행 상황:
         <span id="currentQuestion">1</span>/<span id="totalQuestions">32</span> |
         정답률:
@@ -273,17 +347,32 @@
 
     <!-- 문제 오디오 -->
     <div class="audio-section">
-      <div id="audiodiv">
-        <audio id="audio" controls>
+      <div class="custom-audio-player">
+        <audio id="audio">
           <source id="audioSource" src="" type="audio/mpeg">
-          Your browser does not support the audio element.
         </audio>
-        <button id="shuffleButton" onclick="shufflePlaylist()" aria-label="문제 섞기">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm0.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
-          </svg>
-        </button>
+        <div class="controls">
+          <button class="play-pause">
+            <span class="play">▶</span>
+            <span class="pause">⏸🔀</span>
+          </button>
+          <div class="time">
+            <span class="current">0:00</span>
+            <span class="duration">/ 0:00</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress"></div>
+          </div>
+          <div class="volume-control">
+            <button class="volume">🔊</button>
+          </div>
+          <button id="shuffleButton" aria-label="문제 섞기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm0.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
+            </svg>
+          </button>
+        </div>
       </div>
       <div id="answerReveal"></div>
     </div>
@@ -351,6 +440,52 @@
       { movie: "스타워즈", composer: "존윌리암스", music: "메인 테마", audio: "media/31. 스타워즈 (존 윌리암스：메인 테마).mp3" },
       { movie: "트루먼 쇼", composer: "모차르트", music: "터키 행진곡", audio: "media/32. 트루먼 쇼 (모차르트：터키행진곡).mp3" }
     ];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const audio = document.querySelector('audio');
+      const playPauseBtn = document.querySelector('.play-pause');
+      const progress = document.querySelector('.progress');
+      const progressBar = document.querySelector('.progress-bar');
+      const currentTime = document.querySelector('.current');
+      const duration = document.querySelector('.duration');
+
+      playPauseBtn.addEventListener('click', togglePlay);
+      audio.addEventListener('timeupdate', updateProgress);
+      audio.addEventListener('loadedmetadata', setDuration);
+      progressBar.addEventListener('click', seek);
+
+      function togglePlay() {
+        if (audio.paused) {
+          audio.play();
+          playPauseBtn.classList.add('playing');
+        } else {
+          audio.pause();
+          playPauseBtn.classList.remove('playing');
+        }
+      }
+
+      function updateProgress() {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progress.style.width = `${percent}%`;
+        currentTime.textContent = formatTime(audio.currentTime);
+      }
+
+      function setDuration() {
+        duration.textContent = `/ ${formatTime(audio.duration)}`;
+      }
+
+      function seek(e) {
+        const percent = e.offsetX / progressBar.offsetWidth;
+        audio.currentTime = percent * audio.duration;
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        seconds = Math.floor(seconds % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }
+    });
+
     let currentQuestion = 0; // 현재 문제 번호
     let correctAnswers = 0; // 정답 횟수
     const totalQuestions = quizData.length;
@@ -452,19 +587,27 @@
     // 다음 문제로 이동 함수 수정
     function goToNextQuestion() {
       if (questionStatus[currentQuestion] === 0) {
-        questionStatus[currentQuestion] = -1; // 답변하지 않은 문제는 오답 처리
+        questionStatus[currentQuestion] = -1;
       }
-      updateUnderdiv(); // underdiv 업데이트
+      updateUnderdiv();
       currentQuestion++;
+
       if (currentQuestion >= totalQuestions) {
         alert("퀴즈 종료!");
         currentQuestion = 0;
         correctAnswers = 0;
-        questionStatus = new Array(quizData.length).fill(0); // 상태 초기화
+        questionStatus = new Array(quizData.length).fill(0);
       }
+
       loadQuestion();
       const audioElement = document.getElementById("audio");
-      audioElement.play();
+      const playPauseBtn = document.querySelector('.play-pause');
+
+      audioElement.play().then(() => {
+        playPauseBtn.classList.add('playing'); // 재생 시 playing 클래스 추가
+      }).catch((error) => {
+        console.log("재생 실패:", error);
+      });
     }
 
     function updateUnderdiv() {
