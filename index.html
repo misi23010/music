@@ -140,7 +140,7 @@
       margin-bottom: 20px;
     }
 
-    #audiodiv{
+    #audiodiv {
       display: flex;
     }
 
@@ -222,6 +222,31 @@
       transform: scale(1.1);
       transition: all 0.2s ease;
     }
+
+    #underdiv {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #underdiv span {
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    #toggleUnderdiv {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #toggleUnderdiv:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 
@@ -238,7 +263,7 @@
         정답률:
         <span id="accuracy">0%</span>
         <button id="toggleAnswer" onclick="toggleAnswer()">정답 보기</button>
-        
+
       </div>
     </div>
 
@@ -282,7 +307,10 @@
     </div>
 
   </div>
-
+  <div class="container">
+    <button id="toggleUnderdiv">정답 목록 보기/숨기기</button>
+    <div id="underdiv" style="display: none;"></div>
+  </div>
   <script>
     // 퀴즈 데이터베이스
     const quizData = [
@@ -292,32 +320,32 @@
       { movie: "마이너리티 리포트", composer: "슈베르트", music: "교향곡 8번 미완성", audio: "media/4. 마이너리티 리포트 (슈베르트：교향곡 8번 '미완성' ).mp3" },
       { movie: "시네마천국", composer: "엔니오모리꼬네", music: "러브테마", audio: "media/5. 시네마 천국 (엔니오 모리꼬네 시네마 천국 중 러브테마).mp3" },
       { movie: "킹스스피치", composer: "모차르트", music: "피가로의 결혼 서곡", audio: "media/6. 킹스스피치 (모차르트  피가로의 결혼 서곡).mp3" },
-      { movie: "쇼생크탈출", composer: "모차르트", music: "피가로의 결혼 중 포근한 산들 바람 이", audio: "media/7. 쇼생크 탈출 (모차르트 휘가로의 결혼 중 포근한 산들바람이).mp3" },
+      { movie: "쇼생크탈출", composer: "모차르트", music: "피가로의 결혼 중 포근한 산들 바람이", audio: "media/7. 쇼생크 탈출 (모차르트 휘가로의 결혼 중 포근한 산들바람이).mp3" },
       { movie: "오션스 일레븐", composer: "드뷔시", music: "달빛", audio: "media/8. 오션스 일레븐 (드뷔시：달빛).mp3" },
-      { movie: "피아니스트", composer: "쇼팽", music: "발라드1번", audio: "media/9. 피아니스트 (쇼팽 발라드 1번).mp3" },
+      { movie: "피아니스트", composer: "쇼팽", music: "발라드 1번", audio: "media/9. 피아니스트 (쇼팽 발라드 1번).mp3" },
       { movie: "황야의 무법자", composer: "엔니오모리꼬네", music: "황야의 무법자 테마", audio: "media/10. 황야의 무법자 (엔니오 모리꼬네 황야의 무법자 테마).mp3" },
       { movie: "킹스스피치, 불멸의 연인", composer: "베토벤", music: "교향곡 7번", audio: "media/11. 킹스스피치, 불별의 연인 (베토벤 교향곡 7번 ).mp3" },
       { movie: "미션", composer: "엔니오모리꼬네", music: "가브리엘의 오보에", audio: "media/12. 미션 (엔니오 모리꼬네 가브리엘의 오보에).mp3" },
-      { movie: "킹스스피치, 불멸의 연인", composer: "베토벤", music: "피아노협주곡5번 황제", audio: "media/13. 킹스스피치, 불멸의 연인(베토벤 - 피아노 협주곡 제5번 황제).mp3" },
+      { movie: "킹스스피치, 불멸의 연인", composer: "베토벤", music: "피아노협주곡 5번 황제", audio: "media/13. 킹스스피치, 불멸의 연인(베토벤 - 피아노 협주곡 제5번 황제).mp3" },
       { movie: "불멸의 연인", composer: "베토벤", music: "교향곡 5번 운명", audio: "media/14. 불멸의 연인 (베토벤 교향곡 5번 운명).mp3" },
       { movie: "불멸의 연인", composer: "베토벤", music: "교향곡 3번 영웅", audio: "media/15. 불멸의 연인 (베토벤 교향곡 제3번 `영웅` ).mp3" },
-      { movie: "샤인", composer: "리스트", music: "라캄파넬라", audio: "media/16. 샤인 (리스트 파가니니연습곡 제3번 - 라 캄파넬라).mp3" },
+      { movie: "샤인", composer: "리스트", music: "라캄파넬라", audio: "media/16. 샤인 (리스트 파가니니 연습곡 제3번 - 라 캄파넬라).mp3" },
       { movie: "샤인", composer: "림스키코르샤코프", music: "왕벌의 비행", audio: "media/17. 샤인 (림스키 코르샤코프 왕벌의 비행 라흐마니노편곡).mp3" },
       { movie: "킹스스피치", composer: "모차르트", music: "클라리넷 협주곡 A장조", audio: "media/18. 킹스스피치 (모차르트  클라리넷 협주곡 A장조 ).mp3" },
       { movie: "판타지아", composer: "바흐", music: "토카타와 푸가", audio: "media/19. 판타지아 (바흐 토카타와 푸가).mp3" },
       { movie: "파리넬리", composer: "헨델", music: "울게하소서", audio: "media/20, 파리넬리 (헨델 울게하소서).mp3" },
-      { movie: "피아니스트", composer: "쇼팽", music: "녹턴 C#마이너", audio: "media/21. 피아니스트 (쇼팽 녹턴 C%23 마이너).mp3" },
-      { movie: "ET", composer: "존윌리암스", music: "메인테마", audio: "media/22. E.T (존 윌리암스：메인 테마).mp3" },
-      { movie: "내 여자친구를 소개합니다.", composer: "사티", music: "짐노페디1번", audio: "media/23. 내 여자친구를 소개합니다 (사티：짐노페디 1번).mp3" },
-      { movie: "대부3", composer: "마스카니", music: "카발레리아루스티카나 간주곡", audio: "media/24. 대부 3 (마스카니：카발레리아 루스티카나 간주곡).mp3" },
+      { movie: "피아니스트", composer: "쇼팽", music: "녹턴 C# 마이너", audio: "media/21. 피아니스트 (쇼팽 녹턴 C%23 마이너).mp3" },
+      { movie: "ET", composer: "존윌리암스", music: "메인 테마", audio: "media/22. E.T (존 윌리암스：메인 테마).mp3" },
+      { movie: "내 여자친구를 소개합니다.", composer: "사티", music: "짐노페디 1번", audio: "media/23. 내 여자친구를 소개합니다 (사티：짐노페디 1번).mp3" },
+      { movie: "대부3", composer: "마스카니", music: "카발레리아 루스티카나 간주곡", audio: "media/24. 대부 3 (마스카니：카발레리아 루스티카나 간주곡).mp3" },
       { movie: "로미오와 줄리엣", composer: "모차르트", music: "교향곡 25번", audio: "media/25. 로미오와 줄리엣 (모차르트：교향곡 25번 ).mp3" },
       { movie: "메리에겐 뭔가 특별한 것이 있다", composer: "모차르트", music: "아이네 클라이네 나흐트 뮤직", audio: "media/26. 메리에겐 뭔가 특별한 것이 있다 (모차르트：아이네 클라이네 나흐트뮤직 ).mp3" },
       { movie: "뮤직 러버", composer: "차이코프스키", music: "피아노 협주곡 1번", audio: "media/27. 뮤직 러버 (차이코프스키：피아노 협주곡 1번 ).mp3" },
-      { movie: "불멸의 연인", composer: "베토벤", music: "피아노소나타 월광", audio: "media/28. 불멸의 연인 (베토벤：피아노 소나타 14번 '월광').mp3" },
+      { movie: "불멸의 연인", composer: "베토벤", music: "피아노 소나타 월광", audio: "media/28. 불멸의 연인 (베토벤：피아노 소나타 14번 '월광').mp3" },
       { movie: "빌리엘리어트", composer: "차이코프스키", music: "백조의 호수", audio: "media/29. 빌리 엘리어트 (차이코프스키：백조의 호수 - 장면10 백조의 주제).mp3" },
-      { movie: "샤인", composer: "라흐마니노프", music: "피아노협주곡 3번", audio: "media/30. 샤인 (라흐마니노프 피아노 협주곡 3번).mp3" },
-      { movie: "스타워즈", composer: "존윌리암스", music: "메인테마", audio: "media/31. 스타워즈 (존 윌리암스：메인 테마).mp3" },
-      { movie: "트루먼 쇼", composer: "모차르트", music: "터키행진곡", audio: "media/32. 트루먼 쇼 (모차르트：터키행진곡).mp3" }
+      { movie: "샤인", composer: "라흐마니노프", music: "피아노 협주곡 3번", audio: "media/30. 샤인 (라흐마니노프 피아노 협주곡 3번).mp3" },
+      { movie: "스타워즈", composer: "존윌리암스", music: "메인 테마", audio: "media/31. 스타워즈 (존 윌리암스：메인 테마).mp3" },
+      { movie: "트루먼 쇼", composer: "모차르트", music: "터키 행진곡", audio: "media/32. 트루먼 쇼 (모차르트：터키행진곡).mp3" }
     ];
     let currentQuestion = 0; // 현재 문제 번호
     let correctAnswers = 0; // 정답 횟수
@@ -325,6 +353,24 @@
 
     let showAnswerAlways = false; // 정답 보기 유지 여부
 
+    let totalQuestionList = quizData.map(q => `${q.movie} - ${q.composer} - ${q.music}`);
+
+    let questionStatus = new Array(quizData.length).fill(0); // 0: 미답변, 1: 정답, -1: 오답
+
+    for (let index = 0; index < quizData.length; index++) {
+      totalQuestionList.push(`${quizData[index].movie} - ${quizData[index].composer} - ${quizData[index].music}\n`);
+    }
+
+    document.getElementById("underdiv").innerHTML = totalQuestionList.map(q => `<div>${q}</div>`).join('');
+
+    document.getElementById("toggleUnderdiv").addEventListener("click", function () {
+      const underdiv = document.getElementById("underdiv");
+      if (underdiv.style.display === "none") {
+        underdiv.style.display = "block";
+      } else {
+        underdiv.style.display = "none";
+      }
+    });
     // 초기화
     document.getElementById("totalQuestions").innerText = totalQuestions;
 
@@ -335,12 +381,14 @@
         [quizData[i], quizData[j]] = [quizData[j], quizData[i]];
       }
 
-      // 첫 번째 문제부터 다시 시작
+      // 모든 상태 초기화
       currentQuestion = 0;
       correctAnswers = 0;
+      questionStatus = new Array(quizData.length).fill(0); // 문제 상태 배열 초기화
 
       // 새로운 문제 로드
       loadQuestion();
+      updateUnderdiv(); // underdiv 업데이트
 
       // 오디오 자동 재생
       const audioElement = document.getElementById("audio");
@@ -371,7 +419,6 @@
       const movie = document.getElementById("movie").value.trim();
       const composer = document.getElementById("composer").value.trim();
       const music = document.getElementById("music").value.trim();
-
       const correctMovie = quizData[currentQuestion].movie;
       const correctComposer = quizData[currentQuestion].composer;
       const correctMusic = quizData[currentQuestion].music;
@@ -380,26 +427,44 @@
         document.getElementById("result").innerText = "정답입니다!";
         document.getElementById("result").className = "result correct";
         correctAnswers++;
+        questionStatus[currentQuestion] = 1; // 정답 표시
+        setTimeout(goToNextQuestion, 3000);
       } else {
-        document.getElementById("result").innerText =
-          `정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}"입니다.`;
+        document.getElementById("result").innerText = `정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}"입니다.`;
         document.getElementById("result").className = "result incorrect";
+        questionStatus[currentQuestion] = -1; // 오답 표시
       }
+      updateUnderdiv(); // underdiv 업데이트
     }
 
     // 다음 문제로 이동 함수 수정
     function goToNextQuestion() {
+      if (questionStatus[currentQuestion] === 0) {
+        questionStatus[currentQuestion] = -1; // 답변하지 않은 문제는 오답 처리
+      }
+      updateUnderdiv(); // underdiv 업데이트
       currentQuestion++;
-
       if (currentQuestion >= totalQuestions) {
         alert("퀴즈 종료!");
-        currentQuestion = 0; // 처음으로 초기화
-        correctAnswers = 0; // 점수 초기화
+        currentQuestion = 0;
+        correctAnswers = 0;
+        questionStatus = new Array(quizData.length).fill(0); // 상태 초기화
       }
-
-      loadQuestion(); // 다음 문제 로드
+      loadQuestion();
       const audioElement = document.getElementById("audio");
       audioElement.play();
+    }
+
+    function updateUnderdiv() {
+      const underdiv = document.getElementById("underdiv");
+      let updatedContent = "";
+      for (let i = 0; i < quizData.length; i++) {
+        const question = quizData[i];
+        const status = questionStatus[i];
+        const color = status === 1 ? "green" : status === -1 ? "red" : "black";
+        updatedContent += `<span style="color: ${color}">${question.movie} - ${question.composer} - ${question.music}</span><br>`;
+      }
+      underdiv.innerHTML = updatedContent;
     }
 
     // 진행 상황 업데이트
@@ -439,7 +504,10 @@
     }
 
     // 첫 번째 문제 로드
-    window.onload = loadQuestion;
+    window.onload = function () {
+      updateUnderdiv();
+      loadQuestion();
+    }
 
   </script>
 </body>

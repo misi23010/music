@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "music",
+			"path": "."
+		},
+		{
+			"name": "media",
+			"path": "../media"
+		}
+	],
+	"settings": {}
+}
