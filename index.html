@@ -204,8 +204,8 @@
     }
 
     #shuffleButton {
-      background-color: #28a745;
-      color: white;
+      background-color: transparent;
+      color: gray;
       border: none;
       padding: 12px;
       margin-top: 15px;
@@ -214,13 +214,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      /* 크기 증가 */
+      height: 48px;
+      /* 크기 증가 */
       flex-shrink: 0;
     }
 
+    #shuffleButton svg {
+      width: 28px;
+      /* SVG 아이콘 크기 증가 */
+      height: 28px;
+      /* SVG 아이콘 크기 증가 */
+    }
+
     #shuffleButton:hover {
-      background-color: #218838;
+      background-color: transparent;
       transform: scale(1.1);
       transition: all 0.2s ease;
     }
