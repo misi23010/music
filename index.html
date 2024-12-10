@@ -119,32 +119,43 @@
 <body>
   <h1>영화 음악 퀴즈</h1>
 
-  <!-- 진행 상황 -->
-  <div class="progress" id="progress">
-    진행 상황: <span id="currentQuestion">1</span>/<span id="totalQuestions">32</span> |
-    정답률: <span id="accuracy">0%</span>
-  </div>
-
-  <!-- 퀴즈 -->
-  <div class="question">
-    <audio id="audio" controls>
-      <source id="audioSource" src="" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-    <p>음악을 듣고 아래 질문에 답하세요:</p>
-    <form id="quizForm">
-      <label for="movie">영화 제목:</label><br>
-      <input type="text" id="movie" name="movie"><br><br>
-
-      <label for="composer">작곡가:</label><br>
-      <input type="text" id="composer" name="composer"><br><br>
-
-      <label for="music">음악 제목:</label><br>
-      <input type="text" id="music" name="music"><br><br>
-
-      <button type="button" onclick="checkAnswer()">제출</button>
-    </form>
-    <div class="result" id="result"></div>
+  <div class="container">
+    <!-- 진행 상황 -->
+    <div class="progress" id="progress">
+      진행 상황: <span id="currentQuestion">1</span>/<span id="totalQuestions">32</span> |
+      정답률: <span id="accuracy">0%</span>
+    </div>
+  
+    <!-- 문제 오디오 -->
+    <div class="audio-section">
+      <audio id="audio" controls>
+        <source id="audioSource" src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  
+    <!-- 답안 입력 -->
+    <div class="answer-section">
+      <p>음악을 듣고 아래 질문에 답하세요:</p>
+      <form id="quizForm">
+        <label for="movie">영화 제목:</label><br>
+        <input type="text" id="movie" name="movie"><br><br>
+  
+        <label for="composer">작곡가:</label><br>
+        <input type="text" id="composer" name="composer"><br><br>
+  
+        <label for="music">음악 제목:</label><br>
+        <input type="text" id="music" name="music"><br><br>
+  
+        <button type="button" onclick="checkAnswer()">제출</button>
+      </form>
+    </div>
+  
+    <!-- 결과 및 틀린 문제 표시 -->
+    <div class="result-section">
+      <div class="result" id="result"></div>
+      <!-- 넘어가기 버튼은 JavaScript에서 동적으로 추가 -->
+    </div>
   </div>
 
   <!-- 복습 모드 -->
