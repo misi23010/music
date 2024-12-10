@@ -4,27 +4,101 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>영화 음악 퀴즈</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* 기본 스타일 */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      margin: 0;
+      width: 100%;
       text-align: center;
-      margin: 20px;
     }
-    .question {
-      margin: 20px 0;
-    }
-    .result {
+
+    .container {
+      max-width: 800px;
+      width: 90%;
+      background-color: white;
+      padding: 20px;
       margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress {
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .question {
+      text-align: center;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    label {
       font-weight: bold;
     }
-    .progress {
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
       margin-top: 20px;
       font-size: 18px;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+
+    .result.correct {
+      color: green;
+    }
+
+    .result.incorrect {
+      color: red;
+    }
+
+    .review-btn {
+        margin-top :15px; 
+        background:#28a745; 
+        color:white; 
+        border:none; 
+        padding :10 px;
+        cursor:pointer;
+        border-radius :5 px;
     }
   </style>
 </head>
@@ -107,39 +181,59 @@
 
     // 문제 로드
     function loadQuestion() {
-        const audioSource = document.getElementById("audioSource");
-        audioSource.src = quizData[currentQuestion].audio;
-        document.getElementById("audio").load();
-        document.getElementById("result").innerText = "";
-        document.getElementById("quizForm").reset();
-        updateProgress();
+    const audioSource = document.getElementById("audioSource");
+    audioSource.src = quizData[currentQuestion].audio;
+    const audioElement = document.getElementById("audio");
+    
+    audioElement.load();
+    audioElement.play(); // 음악 자동 재생
+
+    document.getElementById("result").innerText = "";
+    document.getElementById("quizForm").reset();
     }
 
     // 정답 확인
     function checkAnswer() {
-        const movie = document.getElementById("movie").value.trim();
-        const composer = document.getElementById("composer").value.trim();
-        const music = document.getElementById("music").value.trim();
+    const movie = document.getElementById("movie").value.trim();
+    const composer = document.getElementById("composer").value.trim();
+    const music = document.getElementById("music").value.trim();
 
-        const correctMovie = quizData[currentQuestion].movie;
-        const correctComposer = quizData[currentQuestion].composer;
-        const correctMusic = quizData[currentQuestion].music;
+    const correctMovie = quizData[currentQuestion].movie;
+    const correctComposer = quizData[currentQuestion].composer;
+    const correctMusic = quizData[currentQuestion].music;
 
-        if (movie === correctMovie && composer === correctComposer && music === correctMusic) {
-            document.getElementById("result").innerText = `정답입니다!`;
-            correctAnswers++;
-        } else {
-            document.getElementById("result").innerText = `오답입니다! 정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}" 입니다.`;
-            incorrectAnswers.push(quizData[currentQuestion]);
-        }
+    if (movie === correctMovie && composer === correctComposer && music === correctMusic) {
+        document.getElementById("result").innerText = "정답입니다!";
+        document.getElementById("result").className = "result correct";
+    } else {
+        document.getElementById("result").innerText = `오답입니다! 정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}" 입니다.`;
+        document.getElementById("result").className = "result incorrect";
+        // 틀린 문제 저장
+        incorrectAnswers.push(quizData[currentQuestion]);
+    }
 
-        currentQuestion++;
-        if (currentQuestion >= totalQuestions) {
-            alert("퀴즈가 종료되었습니다!");
-            currentQuestion = 0; // 다시 처음으로
-        }
-        
-        loadQuestion();
+    currentQuestion++;
+    if (currentQuestion >= quizData.length) {
+        alert("퀴즈가 종료되었습니다!");
+        showIncorrectAnswers(); // 틀린 문제 표시
+        currentQuestion = 0; // 처음으로 초기화
+    }
+
+    loadQuestion();
+    }
+
+    function showIncorrectAnswers() {
+    const incorrectListContainer = document.createElement("div");
+    incorrectListContainer.className = "incorrect-list";
+    incorrectListContainer.innerHTML = "<h3>틀린 문제 목록:</h3>";
+
+    incorrectAnswers.forEach((item, index) => {
+        const listItem = document.createElement("p");
+        listItem.textContent = `${index + 1}. 영화: ${item.movie}, 작곡가: ${item.composer}, 음악: ${item.music}`;
+        incorrectListContainer.appendChild(listItem);
+    });
+
+    document.body.appendChild(incorrectListContainer);
     }
 
     // 진행 상황 업데이트
