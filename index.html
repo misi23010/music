@@ -110,17 +110,16 @@
       cursor: pointer;
       margin-top: 15px;
     }
-    .answer_section {
-      width: 50%;
-    }
-
     .next-btn:hover {
       background-color: #218838;
     }
-    /* 결과 섹션 중앙 정렬 */
-    .result-section {
-        text-align: center; /* 텍스트와 버튼 모두 중앙 정렬 */
-    }
+    .answer-section {
+    max-width: 500px; /* 섹션 너비 조정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 20px;
+  }
+
   </style>
 </head>
 <body>
@@ -145,13 +144,13 @@
     <div class="answer-section">
       <p>음악을 듣고 아래 질문에 답하세요:</p>
       <form id="quizForm">
-        <label for="movie">영화 제목:</label><br>
+        <label for="movie">영화 제목</label><br>
         <input type="text" id="movie" name="movie"><br><br>
   
-        <label for="composer">작곡가:</label><br>
+        <label for="composer">작곡가</label><br>
         <input type="text" id="composer" name="composer"><br><br>
   
-        <label for="music">음악 제목:</label><br>
+        <label for="music">음악 제목</label><br>
         <input type="text" id="music" name="music"><br><br>
   
         <button type="button" onclick="checkAnswer()">제출</button>
@@ -208,6 +207,7 @@
     let correctAnswers = 0; // 정답 횟수
     let incorrectAnswers = []; // 틀린 문제 저장
     const totalQuestions = quizData.length;
+    let showAnswers = false; // 정답 표시 토글 상태
 
     document.getElementById("totalQuestions").innerText = totalQuestions;
 
@@ -223,6 +223,9 @@
         document.getElementById("result").innerText = "";
         document.getElementById("quizForm").reset();
         updateProgress(); // 진행 상황 업데이트
+
+        // 정답 표시 상태 초기화
+        updateAnswerVisibility();
     }
 
     // 정답 확인
@@ -244,31 +247,21 @@
             document.getElementById("result").className = "result incorrect";
             incorrectAnswers.push(quizData[currentQuestion]); // 틀린 문제 저장
         }
-
-        // "넘어가기" 버튼 활성화
-        const nextButton = document.createElement("button");
-        nextButton.textContent = "넘어가기";
-        nextButton.className = "next-btn";
-        nextButton.onclick = goToNextQuestion;
-        
-        // 기존 버튼 제거 및 새 버튼 추가
-        const resultContainer = document.getElementById("result");
-        resultContainer.appendChild(nextButton);
     }
 
     // 틀린 문제 리스트 표시
     function showIncorrectAnswers() {
-      const incorrectListContainer = document.createElement("div");
-      incorrectListContainer.className = "incorrect-list";
-      incorrectListContainer.innerHTML = "<h3>틀린 문제 목록:</h3>";
+        const incorrectListContainer = document.createElement("div");
+        incorrectListContainer.className = "incorrect-list";
+        incorrectListContainer.innerHTML = "<h3>틀린 문제 목록:</h3>";
 
-      incorrectAnswers.forEach((item, index) => {
-        const listItem = document.createElement("p");
-        listItem.textContent = `${index + 1}. 영화: ${item.movie}, 작곡가: ${item.composer}, 음악: ${item.music}`;
-        incorrectListContainer.appendChild(listItem);
-      });
+        incorrectAnswers.forEach((item, index) => {
+            const listItem = document.createElement("p");
+            listItem.textContent = `${index + 1}. 영화: ${item.movie}, 작곡가: ${item.composer}, 음악: ${item.music}`;
+            incorrectListContainer.appendChild(listItem);
+        });
 
-      document.body.appendChild(incorrectListContainer);
+        document.body.appendChild(incorrectListContainer);
     }
 
     // 다음 문제로 이동
@@ -293,44 +286,50 @@
         document.getElementById("accuracy").innerText = `${accuracy}%`;
     }
 
-    // 틀린 문제 리스트 표시
-    function showIncorrectAnswers() {
-        const incorrectListContainer = document.createElement("div");
-        incorrectListContainer.className = "incorrect-list";
-        incorrectListContainer.innerHTML = "<h3>틀린 문제 목록:</h3>";
-
-        incorrectAnswers.forEach((item, index) => {
-            const listItem = document.createElement("p");
-            listItem.textContent = `${index + 1}. 영화: ${item.movie}, 작곡가: ${item.composer}, 음악: ${item.music}`;
-            incorrectListContainer.appendChild(listItem);
-        });
-
-        document.body.appendChild(incorrectListContainer);
+    // 정답 표시 토글 버튼 추가
+    function toggleAnswerVisibility() {
+        showAnswers = !showAnswers;
+        updateAnswerVisibility();
     }
 
-    // 복습 모드 시작
-    function startReviewMode() {
-      if (incorrectAnswers.length === 0) {
-        alert("복습할 문제가 없습니다!");
-        return;
-      }
+    // 정답 표시 상태 업데이트
+    function updateAnswerVisibility() {
+        const answerContainer = document.getElementById("answerContainer");
+        if (showAnswers) {
+            const correctMovie = quizData[currentQuestion].movie;
+            const correctComposer = quizData[currentQuestion].composer;
+            const correctMusic = quizData[currentQuestion].music;
 
-      quizData.length = incorrectAnswers.length; // 기존 데이터 교체
-      for (let i = 0; i < incorrectAnswers.length; i++) {
-        quizData[i] = incorrectAnswers[i];
-      }
-
-      currentQuestion = 0; // 첫 번째 복습 문제로 이동
-      correctAnswers = 0; // 점수 초기화
-      incorrectAnswers = []; // 틀린 문제 초기화
-
-      alert("복습 모드를 시작합니다!");
-      loadQuestion();
+            answerContainer.innerHTML = `
+                영화: ${correctMovie}<br>
+                작곡가: ${correctComposer}<br>
+                음악: ${correctMusic}
+            `;
+            answerContainer.style.display = "block";
+        } else {
+            answerContainer.style.display = "none";
+        }
     }
 
     // 첫 번째 문제 로드
-    window.onload = loadQuestion;
+    window.onload = () => {
+        loadQuestion();
 
-  </script>
+        // "넘어가기" 버튼 항상 표시
+        const nextButtonContainer = document.getElementById("nextButtonContainer");
+        const nextButton = document.createElement("button");
+        nextButton.textContent = "넘어가기";
+        nextButton.className = "next-btn";
+        nextButton.onclick = goToNextQuestion;
+        nextButtonContainer.appendChild(nextButton);
+
+        // "정답 보기" 토글 버튼 추가
+        const toggleButton = document.createElement("button");
+        toggleButton.textContent = "정답 보기";
+        toggleButton.className = "toggle-btn";
+        toggleButton.onclick = toggleAnswerVisibility;
+        nextButtonContainer.appendChild(toggleButton);
+    };
+</script>
 </body>
 </html>
