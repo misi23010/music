@@ -275,7 +275,7 @@
             document.getElementById("result").className = "result correct";
             correctAnswers++;
         } else {
-            document.getElementById("result").innerText = `오답입니다! 정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}" 입니다.`;
+            document.getElementById("result").innerText = `정답: "${correctMovie}, ${correctComposer}, ${correctMusic}"`;
             document.getElementById("result").className = "result incorrect";
             incorrectAnswers.push(quizData[currentQuestion]); // 틀린 문제 저장
         }
