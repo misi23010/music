@@ -320,7 +320,7 @@
       { movie: "마이너리티 리포트", composer: "슈베르트", music: "교향곡 8번 미완성", audio: "media/4. 마이너리티 리포트 (슈베르트：교향곡 8번 '미완성' ).mp3" },
       { movie: "시네마천국", composer: "엔니오모리꼬네", music: "러브테마", audio: "media/5. 시네마 천국 (엔니오 모리꼬네 시네마 천국 중 러브테마).mp3" },
       { movie: "킹스스피치", composer: "모차르트", music: "피가로의 결혼 서곡", audio: "media/6. 킹스스피치 (모차르트  피가로의 결혼 서곡).mp3" },
-      { movie: "쇼생크탈출", composer: "모차르트", music: "피가로의 결혼 중 포근한 산들 바람이", audio: "media/7. 쇼생크 탈출 (모차르트 휘가로의 결혼 중 포근한 산들바람이).mp3" },
+      { movie: "쇼생크탈출", composer: "모차르트", music: "피가로의 결혼 중 포근한 산들바람이", audio: "media/7. 쇼생크 탈출 (모차르트 휘가로의 결혼 중 포근한 산들바람이).mp3" },
       { movie: "오션스 일레븐", composer: "드뷔시", music: "달빛", audio: "media/8. 오션스 일레븐 (드뷔시：달빛).mp3" },
       { movie: "피아니스트", composer: "쇼팽", music: "발라드 1번", audio: "media/9. 피아니스트 (쇼팽 발라드 1번).mp3" },
       { movie: "황야의 무법자", composer: "엔니오모리꼬네", music: "황야의 무법자 테마", audio: "media/10. 황야의 무법자 (엔니오 모리꼬네 황야의 무법자 테마).mp3" },
@@ -428,7 +428,15 @@
         document.getElementById("result").className = "result correct";
         correctAnswers++;
         questionStatus[currentQuestion] = 1; // 정답 표시
-        setTimeout(goToNextQuestion, 3000);
+
+        // 넘어가기 버튼 숨기기
+        document.getElementById("nextButton").style.display = "none";
+
+        setTimeout(() => {
+          goToNextQuestion();
+          // 다음 문제로 넘어간 후 버튼 다시 보이게 하기
+          document.getElementById("nextButton").style.display = "block";
+        }, 3000);
       } else {
         document.getElementById("result").innerText = `정답은 "${correctMovie}, ${correctComposer}, ${correctMusic}"입니다.`;
         document.getElementById("result").className = "result incorrect";
@@ -461,7 +469,7 @@
       for (let i = 0; i < quizData.length; i++) {
         const question = quizData[i];
         const status = questionStatus[i];
-        const color = status === 1 ? "green" : status === -1 ? "red" : "black";
+        const color = status === 1 ? "green" : status === -1 ? "red" : status === 0 ? "gray" : "black";
         updatedContent += `<span style="color: ${color}">${question.movie} - ${question.composer} - ${question.music}</span><br>`;
       }
       underdiv.innerHTML = updatedContent;
