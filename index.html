@@ -9,9 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* 기본 스타일 */
-    input, textarea {
-        font-size: 16px;  /* 기본 폰트 크기를 16px로 설정 */
+    input,
+    textarea {
+      font-size: 16px;
+      /* 기본 폰트 크기를 16px로 설정 */
     }
+
+    html,
+    body {
+      overflow: hidden;
+      /* 스크롤바를 숨깁니다. */
+      height: 100%;
+      /* 전체 높이를 100%로 설정하여 스크롤바가 생기지 않도록 합니다. */
+    }
+
     body {
       font-family: 'Roboto', sans-serif;
       background-color: #f0f4f8;
@@ -364,4 +375,5 @@
 
   </script>
 </body>
+
 </html>
