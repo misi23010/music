@@ -366,7 +366,7 @@
           <div class="volume-control">
             <button class="volume">🔊</button>
           </div>
-          <button id="shuffleButton" aria-label="문제 섞기">
+          <button id="shuffleButton" onclick="shufflePlaylist()" aria-label="문제 섞기">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm0.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
@@ -531,7 +531,14 @@
 
       // 오디오 자동 재생
       const audioElement = document.getElementById("audio");
-      audioElement.play();
+      const playPauseBtn = document.querySelector('.play-pause');
+
+      audioElement.play().then(() => {
+        playPauseBtn.classList.add('playing'); // 재생 시 playing 클래스 추가
+      }).catch((error) => {
+        console.log("재생 실패:", error);
+      });
+      
     }
 
     // 문제 로드 함수 수정
