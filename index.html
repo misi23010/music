@@ -141,7 +141,6 @@
     }
 
     #toggleAnswer {
-      margin-top: 10px;
       display: block;
       float: right;
       margin-left: auto;
@@ -188,44 +187,28 @@
       color: #555;
     }
 
-    .audio-section {
-      margin-bottom: 20px;
-    }
-
-    .audio-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    audio {
-      flex: 1;
-      min-width: 250;
-      height: 50px;
-    }
-
     #shuffleButton {
+      float: right;
       background-color: transparent;
       color: gray;
       border: none;
       padding: 12px;
-      margin-top: 15px;
+      margin-top: -5px;
+      margin-right: 10px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      /* 크기 증가 */
-      height: 48px;
-      /* 크기 증가 */
+      width: 50px;
+      height: 50px;
       flex-shrink: 0;
     }
 
     #shuffleButton svg {
-      width: 28px;
+      width: 32px;
       /* SVG 아이콘 크기 증가 */
-      height: 28px;
+      height: 32px;
       /* SVG 아이콘 크기 증가 */
     }
 
@@ -250,16 +233,6 @@
         정답률:
         <span id="accuracy">0%</span>
         <button id="toggleAnswer" onclick="toggleAnswer()">정답 보기</button>
-      </div>
-    </div>
-
-    <!-- 문제 오디오 -->
-    <div class="audio-section">
-      <div class="audio-controls">
-        <audio id="audio" controls>
-          <source id="audioSource" src="" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
         <button id="shuffleButton" onclick="shufflePlaylist()" aria-label="문제 섞기">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path
@@ -267,6 +240,14 @@
           </svg>
         </button>
       </div>
+    </div>
+
+    <!-- 문제 오디오 -->
+    <div class="audio-section">
+      <audio id="audio" controls>
+        <source id="audioSource" src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
       <div id="answerReveal"></div>
     </div>
 
