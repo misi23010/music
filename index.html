@@ -441,10 +441,10 @@
       updateUnderdiv(); // underdiv 업데이트
       currentQuestion++;
       if (currentQuestion >= totalQuestions) {
-        alert("퀴즈 종료!");
         currentQuestion = 0;
         correctAnswers = 0;
         questionStatus = new Array(quizData.length).fill(0); // 상태 초기화
+        updateUnderdiv();
       }
       loadQuestion();
       const audioElement = document.getElementById("audio");
